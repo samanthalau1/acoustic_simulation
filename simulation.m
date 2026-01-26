@@ -51,29 +51,29 @@ medium.sound_speed(tank_walls) = 5900;
 medium.density(tank_walls) = 7900;
 
 % %% creating dampener
-
+% 
 % medium.alpha_coeff = zeros(Nx, Ny);  % initialize attenuation for dampener
 % medium.alpha_power = 1.5;
-% dampener_thickness = 8;  % thicker than steel wall
+% damp_thickness = 8;  % thicker than steel wall
 % 
 % % bottom dampener
 % bottom_dampener = false(Nx, Ny);
-% bottom_dampener(end-wall_thickness-dampener_thickness+1:end-wall_thickness, :) = true;
+% bottom_dampener(end-wall_thickness-damp_thickness-margin+1:end-wall_thickness-margin, :) = true;
 % 
 % % left dampener
 % left_dampener = false(Nx, Ny);
-% left_dampener(:, wall_thickness+1:wall_thickness+dampener_thickness) = true;
+% left_dampener(:, wall_thickness+margin+1:wall_thickness+damp_thickness+margin) = true;
 % 
 % % right dampener
 % right_dampener = false(Nx, Ny);
-% right_dampener(:, end-wall_thickness-dampener_thickness+1:end-wall_thickness) = true;
+% right_dampener(:, end-wall_thickness-damp_thickness-margin+1:end-wall_thickness-margin) = true;
 % 
 % % combine dampeners
 % dampeners = bottom_dampener | left_dampener | right_dampener;
 % 
 % % dampener properties (rubber/foam-like)
-% medium.sound_speed(dampeners) = 1800;      % Rubber: ~1800 m/s
-% medium.density(dampeners) = 1200;          % Rubber: ~1200 kg/m³
+% medium.sound_speed(dampeners) = 1800;      
+% medium.density(dampeners) = 1200;          
 % medium.alpha_coeff(dampeners) = 5.0;       % HIGH attenuation (dB/(MHz^y cm))
 
 %% time array
@@ -117,7 +117,8 @@ legend('Source', 'Sensor');
 hold off;
 
 %% running simulation
-input_args = {'PMLInside', false, 'PMLSize', 20, 'DataCast', 'single'};
+cm = getColorMap();
+input_args = {'PMLInside', false, 'PMLSize', 20, 'ColorMap', cm, 'DataCast', 'single'};
 sensor_data = kspaceFirstOrder2D(kgrid, medium, source, sensor, input_args{:});
 
 %% plot A-scan of point sensor
